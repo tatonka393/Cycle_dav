@@ -12,11 +12,13 @@ const { ReadlineParser } = require('@serialport/parser-readline')
   class DM500{
     constructor(){
         this.preambule = [0xff,0xff,0xff]
-        this.path = '/dev/ttyUSB0'
+        this.path = '/dev/ttyS4'//'/dev/ttyUSB0'
         this.baud_rate = 9600
         this.port
         this.parser
         this.pressure = 0
+        this.err_count = 0
+        this.err_state = false
     }
 
     async Create(){
@@ -25,7 +27,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
             for(let item of port_list){
                 if(item.path == this.path){
                     this.port = new SerialPort({ path: this.path,baudRate: this.baud_rate})
-                    this.parser = this.port.pipe(new InterByteTimeoutParser({ interval: 30 }))
+                    this.parser = this.port.pipe(new InterByteTimeoutParser({ interval: 110}))
                     return "port is open"
                 }
             }
@@ -41,13 +43,18 @@ const { ReadlineParser } = require('@serialport/parser-readline')
     
     async checkPress(){
         try{
-        const ans = await this.Write([0x82,0xFF,0xFF,0xFF,0xFF,0x00,0x01,0x00])
-        
-        const value = Ieee754toFloat(ans.slice(ans.length-4,ans.length))
-        //console.log(value)
-        return value
+            const ans = await this.Write([0x82,0xFF,0xFF,0xFF,0xFF,0x00,0x01,0x00])
+            
+            const value = Ieee754toFloat(ans.slice(ans.length-4,ans.length))
+            //console.log(value)
+            this.err_count = 0
+            this.err_state = false 
+            return value
         }
         catch(e){
+            this.err_count ++
+            if(this.err_count >= 10)
+                this.err_state = true 
             console.log(e)
         }
     }
@@ -56,10 +63,12 @@ const { ReadlineParser } = require('@serialport/parser-readline')
         try {
             await mon.Create()
             setInterval(async ()=>{
+                //console.log('start')
                 mon.pressure  = await mon.checkPress()
-                console.log(mon.pressure)
+                //console.log('stop')
+                //console.log(mon.pressure)
                
-            },200)
+            },300)
         } catch (error) {
          console.log(error)   
         }
@@ -86,7 +95,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
                     if(recive_crc == data[data.length-1])
                         resolve(msg)
                     else
-                        reject({error:'crc error',data,msg})   
+                        reject({error:'crc error',data})   
 
             })
         })  

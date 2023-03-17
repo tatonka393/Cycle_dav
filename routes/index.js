@@ -13,10 +13,17 @@ router.get('/command:value',async (req,res)=>{
   let message = req.params.value
   switch(req.params.value){
     case 'start':
+      if(cycle.sensor_number.length==0)
+      {
+        alert = true
+        message = 'укажите номер сенсора'
+        break
+      }
       cycle.startLoop()
     break
     case 'stop':
       cycle.stopLoop()
+      cycle.sensor_number = ''
     break
     case 'pause':
       cycle.pauseLoop()
@@ -41,6 +48,11 @@ router.get('/command:value',async (req,res)=>{
 
 router.post('/settings', async (req,res)=>{
   console.log(req.body)
+  if(cycle.stage!=0){
+    res.send({message:"Для изменения настроек остановите циклы и убедитесь что вы не дурак и все ввели правильно!"})
+    return
+  }
+  cycle.sensor_number = req.body.sensor_name
   cycle.setBotPause(req.body.bot_pause)
   cycle.setTopPause(req.body.top_pause)
   cycle.setBotPressure(req.body.bot_pressure)

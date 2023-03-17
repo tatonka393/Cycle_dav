@@ -5,17 +5,22 @@ const fs = require('fs').promises
 const path = require('path')
 class LOOP{
         constructor(){
+        this.sensor_number = ''
         this.cycle_count = 100
         this.curent_cycle = 0
         this.top_pressure = 30
         this.bot_pressure = 5
         this.cycle_interval
+        this.panic_interval
+        this.working_timeout
         this.top_pause = 300
         this.bot_pause = 60
         this.stage = 0 //0 - остановлен, 1 - набор давления, 2 - верхняя пауза, 3 - стравить  давление, 4 - нижняя пауза 
         this.config_path = path.join(__dirname,'..','config')
         this.initDevices()
         this.readSettingsFromFile()
+        this.panicInterval()
+        
     }
     async initDevices(){
         try {
@@ -38,6 +43,7 @@ class LOOP{
     }
     pauseLoop(){
         engineuart.stop()
+        enginedb.engineOff()
         clearInterval(this.cycle_interval)
     }
     upPressure(){
@@ -90,10 +96,12 @@ class LOOP{
                 enginedb.stepForvard()
                 enginedb.engineOn()
                 engineuart.start(1)
+                this.workingTimeout()
                 return             
             }
             if(this.stage == 1 && mon.pressure >= this.top_pressure)
             {   
+                clearTimeout(this.working_timeout)
                 this.stage = 2
                 engineuart.stop()
                 enginedb.engineOff()
@@ -103,6 +111,7 @@ class LOOP{
             }
             if(this.stage == 3 && mon.pressure <=this.bot_pressure)
             {
+                clearTimeout(this.working_timeout)
                 this.stage = 4
                 engineuart.stop()
                 enginedb.engineOff()
@@ -115,6 +124,29 @@ class LOOP{
 
         },200)
     }
+    panicInterval(){
+        this.panic_interval = setInterval(()=>{
+            if(mon.pressure >= 110){
+                engineuart.stop()
+                enginedb.engineOff()
+                console.log("превышено макс давление")
+            }
+            if(mon.err_state){
+                engineuart.stop()
+                enginedb.engineOff()
+                console.log("монометр не отвечает")
+            }
+        },100)
+    }
+    workingTimeout(){
+        this.working_timeout = setTimeout(()=>{
+            engineuart.stop()
+            enginedb.engineOff()
+            this.stage = 0
+            clearInterval(this.cycle_interval)
+            console.log('Таймаут времени вращения двигателя')
+        },75000)
+    }
     pauseTimeout(time){
         console.log("start ", time/60000 ," min timeout")  
         setTimeout(()=>{
@@ -122,6 +154,7 @@ class LOOP{
                 this.stage = 3
                 enginedb.engineOn()
                 engineuart.start(1)
+                this.workingTimeout()
             }
             if(this.stage == 4)
                 if(this.curent_cycle >= this.cycle_count)
@@ -134,6 +167,7 @@ class LOOP{
                     this.stage = 1
                     enginedb.engineOn()
                     engineuart.start(1)
+                    this.workingTimeout()
                 }
                     
                 
@@ -141,6 +175,9 @@ class LOOP{
 }
     async readSettingsFromFile(){
         try{
+            if(this.stage!=0){
+                return 'останови циклы брат'
+            }
             const data = await fs.readFile(this.config_path)
             const j_data = JSON.parse(data)
             this.cycle_count = j_data.cycle_count

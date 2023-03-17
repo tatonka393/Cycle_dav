@@ -13,6 +13,7 @@ async function sendForm(e)
 {
     let form=e.target;
     let url=form.action;
+    let sensor_name=document.getElementById('SensorName').value
     let cycle_count=document.getElementById('FcycleCount').value;
     let bot_pressure=document.getElementById('FbotPres').value;
     let top_pressure=document.getElementById('FtopPres').value;
@@ -24,8 +25,12 @@ async function sendForm(e)
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
           },
-          body: JSON.stringify({top_pressure,bot_pressure,cycle_count,top_pause,bot_pause})
+          body: JSON.stringify({top_pressure,bot_pressure,cycle_count,top_pause,bot_pause,sensor_name})
     })
     const result = await response.json()
     alert(result.message)
+}
+
+async function start(){
+    sen
 }

@@ -106,6 +106,8 @@ cursor.lineY.set("visible", false);
 function addData(newValue) {
   //var lastDataItem = series.dataItems[series.dataItems.length - 1];
   var time = am5.time.add(new Date()).getTime();
+  if(series.data.length > 18000)
+    series.data.shift()
   series.data.push({
     date: time,
     value: newValue,

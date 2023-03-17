@@ -1,40 +1,135 @@
-<h1>ЦИКЛО ДАВ ВАН ЛАВ</h1>
-<p id="pressureRange"></p>
-<p id="pressure"></p>
-<p id="cycles"></p>
-<p id="stage"></p>
-<p id="pause"></p>
-<button class="button" onclick="sendCommand('save')"> Сохранить настройки</button>
-<button class="button" onclick="sendCommand('read')"> Считать настройки</button>
-<div id="chartdiv"></div>
-<button class="button" onclick="sendCommand('start')"> Старт</button>
-<button class="button" onclick="sendCommand('stop')"> Стоп</button>
-<button class="button" onclick="sendCommand('pause')"> Пауза</button>
-<button class="button" onclick="sendCommand('up')"> Давление вверх</button>
-<button class="button" onclick="sendCommand('down')"> Давление вниз</button>
-<form method='GET' action='/settings' onsubmit=' sendForm(event); return false; '>
-    <p>
-        <label for='FtopPres'>Верхнее давление:</label>
-        <input type='number' name='FtopPres' id='FtopPres'>
-    </p>
-    <p>
-        <label for='FbotPres'>Нижнее давление:</label>
-        <input type='number' name='FbotPres' id='FbotPres'></input>
-    </p>
-    <p>
-        <label for='FcycleCount'>Количество циклов:</label>
-        <input type='number' name='FcycleCount' id='FcycleCount'></input>
-    </p>
-    <p>
-        <label for='topPause'>Верхняя пауза:</label>
-        <input type='number' name='topPause' id='topPause'></input>
-    </p>
-    <p>
-        <label for='botPause'>Нижняя пауза:</label>
-        <input type='number' name='botPause' id='botPause'></input>
-    </p>
-    <p>
-        <input type='submit' name='subm' value='Применить'>
-        
-    </p>
-</form>
+<div class="container">
+    <h1 class="title">ЦИКЛО ДАВ ВАН ЛАВ</h1>
+    <h2 class="subtitle">только попроси и капитан накрутит твой steeldick</h2>
+    <div class="columns is-variable bd-klmn-columns is-3" >
+        <div class="column">
+            <div class="column box has-background-grey-lighter " id="sensor"></div>   
+        </div>
+        <div class="column">        
+            <div class="column box has-background-grey-lighter " id="pressureRange"></div>
+            <div class="column box has-background-primary " id="pressure"></div>
+        </div>
+        {{!-- <div class="column">
+            
+        </div> --}}
+        <div class="column">
+             <div class="column box has-background-grey-lighter " id="cycles"></div>
+             <div class="column box has-background-grey-lighter " id="stage"></div>
+        </div>
+        {{!-- <div class="column">
+            <div class="column box has-background-grey-lighter " id="stage"></div>
+        </div> --}}
+        <div class="column">
+            <div class="column box has-background-grey-lighter " id="pause"></div>
+        </div>
+       
+    </div>
+
+    <button class="button" onclick="sendCommand('save')"> Сохранить настройки</button>
+    <button class="button" onclick="sendCommand('read')"> Считать настройки</button>
+</div>
+    <div id="chartdiv"></div>
+<div class="container">
+    <button class="button" onclick="sendCommand('start')"> Старт</button>
+    <button class="button" onclick="sendCommand('stop')"> Стоп</button>
+    <button class="button" onclick="sendCommand('pause')"> Пауза</button>
+    <button class="button" onclick="sendCommand('up')"> Давление вверх</button>
+    <button class="button" onclick="sendCommand('down')"> Давление вниз</button>
+    {{!-- <form method='GET' action='/settings' onsubmit=' sendForm(event); return false; '>
+        <p>
+            <label for='SensorName'>Номера сенсоров через запятую:</label>
+            <input  type='text' name='SensorName' id='SensorName'></input>
+        </p>
+        <p>
+            <label for='FtopPres'>Верхнее давление:</label>
+            <input type='number' name='FtopPres' id='FtopPres'>
+        </p>
+        <p>
+            <label for='FbotPres'>Нижнее давление:</label>
+            <input type='number' name='FbotPres' id='FbotPres'></input>
+        </p>
+        <p>
+            <label for='FcycleCount'>Количество циклов:</label>
+            <input type='number' name='FcycleCount' id='FcycleCount'></input>
+        </p>
+        <p>
+            <label for='topPause'>Верхняя пауза:</label>
+            <input type='number' name='topPause' id='topPause'></input>
+        </p>
+        <p>
+            <label for='botPause'>Нижняя пауза:</label>
+            <input type='number' name='botPause' id='botPause'></input>
+        </p>
+        <p>
+            <input type='submit' name='subm' value='Применить'>
+            
+        </p>
+    </form> --}}
+    <form class=" mt-2" method='GET' action='/settings' onsubmit=' sendForm(event); return false; '>
+    <h4 class="title is-4">Настройки</h4>
+    <h6 class="subtitle is-6">Меняй любую настройку нажимай применить! Изменится только то что ты заполнил!</h6>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label" for='SensorName'>Номера сенсоров через запятую:</label>
+                    <div class="control">
+                        <input class="input" type='text' name='SensorName' id='SensorName'></input>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for='FcycleCount'>Количество циклов:</label>
+                    <div class="control">
+                        <input class="input" type='number' name='FcycleCount' id='FcycleCount'></input>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label" for='FtopPres'>Верхнее давление:</label>
+                    <div class="control">
+                        <input class="input" type='number' name='FtopPres' id='FtopPres'>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for='FbotPres'>Нижнее давление:</label>
+                    <div class="control">
+                        <input class="input" type='number' name='FbotPres' id='FbotPres'></input>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label" for='topPause'>Верхняя пауза:</label>
+                    <div class="control">
+                        <input class="input" type='number' name='topPause' id='topPause'></input>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for='botPause'>Нижняя пауза:</label>
+                    <div class="control">
+                        <input class="input" type='number' name='botPause' id='botPause'></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <input class="button" type='submit' name='subm' value='Применить'>
+    </form>
+    
+</div>
+{{!-- <button class="js-modal-trigger" data-target="modal-js-example">
+  Open JS example modal
+</button> --}}
+<div id="modal-js-example" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content">
+    <div class="box">
+      <label for='SensorName'>Номера сенсоров через запятую:</label>
+      <input type='text' name='SensorName' id='SensorName'></input>
+      <button class="button" onclick="Start()"> Старт</button>
+      <!-- Your content -->
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>

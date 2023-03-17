@@ -10,6 +10,7 @@ var http = require('http');
 const ioServer = require('socket.io').Server
 const mon = require('./../utils/monometr')
 const cycle = require('./../utils/cycle')
+const database = require('./../utils/database')
 
 
 /**
@@ -27,7 +28,11 @@ var server = http.createServer(app);
 const io = new ioServer(server)
 io.on("connection", (socket) => {
   console.log('io connect')
-  setInterval(()=>{io.emit("monometr",{
+  
+});
+setInterval(()=>{
+  io.emit("monometr",{
+    sensor_number:cycle.sensor_number,
     pressure:mon.pressure,
     curent_cycle:cycle.curent_cycle,
     top_pressure:cycle.top_pressure,
@@ -36,8 +41,13 @@ io.on("connection", (socket) => {
     top_pause:cycle.top_pause,
     bot_pause:cycle.bot_pause,
     stage:cycle.stage
-  })},1000)
-});
+  })
+  database.insertPressure('ch_1_sensor_5',mon.pressure)
+  if(mon.pressure>0&&cycle.stage!=0){
+    database.insertPressure('ch_1_sensor_6',mon.pressure,cycle.sensor_number)
+    console.log('insert to db ----> ',mon.pressure,cycle.sensor_number)
+  }
+},1000)
 
 /**
  * Listen on provided port, on all network interfaces.
