@@ -36,8 +36,9 @@ class KVSMDB{
             query_string = `INSERT INTO ${table} (press${table_names}) VALUES (${data},${sensor_names})`
         }
         this.pool.query(query_string,(err,res)=>{
-            if(err)
-                console.log(err)
+            if(err){
+                //console.log(err)
+            }            
         })
     }
     
