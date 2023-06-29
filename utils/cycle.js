@@ -57,17 +57,22 @@ class LOOP{
         engineuart.start(1)
     }
     setBotPressure(new_value){
-        if(new_value<1||new_value>100)
+        if(new_value<4||new_value>100){
+            this.bot_pressure = 4;
             return
+        }
         this.bot_pressure = new_value
     }   
     setTopPresure(new_value){
-        if(new_value<1||new_value>100)
-            return
-        if(new_value<this.bot_pressure || this.bot_pressure >= this.top_pressure){
-            this.top_pressure = this.bot_pressure + 1
+        if(new_value<1||new_value>100){
+            this.top_pressure = 100
             return
         }
+        
+        // if(new_value<this.bot_pressure || this.bot_pressure >= this.top_pressure){
+        //     this.top_pressure = this.bot_pressure + 1
+        //     return
+        // }
         this.top_pressure = new_value
     }
     setCycleCount(new_value){
