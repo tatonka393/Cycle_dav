@@ -13,20 +13,20 @@ class KVSMDB{
           })
     }
 
-    stepForvard(){
-        this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R1R0')`)
+    async stepForvard(){
+      return await this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R1R0')`)
     }
 
-    stepBack(){
-        this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R0R0')`)
+    async stepBack(){
+      return await this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R0R0')`)
     }
-    engineOn(){
-        this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R1DC1DISP2')`)
+    async engineOn(){
+        return await this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R1DC1DISP2')`)
     }
-    engineOff(){
-        this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R0DC1DISP2')`)
+    async engineOff(){
+        return await this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R0DC1DISP2')`)
     }
-    insertPressure(table,data,sensor_names){
+    async insertPressure(table,data,sensor_names){
         let query_string
         if(!sensor_names){
             query_string = `INSERT INTO ${table} (press) VALUES (${data})`       

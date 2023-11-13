@@ -19,6 +19,18 @@ const { ReadlineParser } = require('@serialport/parser-readline')
         this.pressure = 0
         this.err_count = 0
         this.err_state = false
+        this.pressure_arr = []
+    }
+
+    addItemToArr(press){
+        const date = new Date()
+        if(this.pressure_arr > 18000)
+            this.pressure_arr.unshift()
+        this.pressure_arr.push({
+            date,
+            value:press
+        })
+        
     }
 
     async Create(){

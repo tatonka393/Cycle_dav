@@ -46,6 +46,10 @@ router.get('/command:value',async (req,res)=>{
   res.send({message,alert})
 })
 
+router.get('/pressure_arr',async (req,res)=>{
+  res.send(mon.pressure_arr)
+})
+
 router.post('/settings', async (req,res)=>{
   console.log(req.body)
   if(cycle.stage!=0){

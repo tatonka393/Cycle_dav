@@ -8,6 +8,14 @@ async function sendCommand(cmd){
         alert(result.message)
     console.log(result.message)               
 }
+async function getPressureArr(){
+    const response = await fetch('/pressure_arr', {
+        method: 'GET',
+    });
+    
+    const result = await response.json();
+    addArrData(result)              
+}
 
 async function sendForm(e)
 {

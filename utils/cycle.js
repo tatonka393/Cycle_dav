@@ -92,14 +92,14 @@ class LOOP{
     }
 
     rotationInterval(){
-        this.cycle_interval = setInterval(()=>{
+        this.cycle_interval = setInterval(async()=>{
             console.log('this.curent_cycle',this.curent_cycle)
             console.log('this.stage',this.stage)
             if(this.stage == 0)
             {
                 this.stage = 1
-                enginedb.stepForvard()
-                enginedb.engineOn()
+                await enginedb.stepForvard()
+                await enginedb.engineOn()
                 engineuart.start(1)
                 this.workingTimeout()
                 return             
@@ -109,8 +109,8 @@ class LOOP{
                 clearTimeout(this.working_timeout)
                 this.stage = 2
                 engineuart.stop()
-                enginedb.engineOff()
-                enginedb.stepBack()
+                await enginedb.engineOff()
+                await enginedb.stepBack()
                 this.pauseTimeout(this.top_pause*1000)//300000)
                 return
             }
@@ -119,8 +119,8 @@ class LOOP{
                 clearTimeout(this.working_timeout)
                 this.stage = 4
                 engineuart.stop()
-                enginedb.engineOff()
-                enginedb.stepForvard()
+                await enginedb.engineOff()
+                await enginedb.stepForvard()
                 this.pauseTimeout(this.bot_pause*1000)//60000)
                 return
             }
@@ -130,23 +130,23 @@ class LOOP{
         },200)
     }
     panicInterval(){
-        this.panic_interval = setInterval(()=>{
+        this.panic_interval = setInterval(async ()=>{
             if(mon.pressure >= 110){
                 engineuart.stop()
-                enginedb.engineOff()
+                await enginedb.engineOff()
                 console.log("превышено макс давление")
             }
             if(mon.err_state){
                 engineuart.stop()
-                enginedb.engineOff()
+                await enginedb.engineOff()
                 console.log("монометр не отвечает")
             }
         },100)
     }
     workingTimeout(){
-        this.working_timeout = setTimeout(()=>{
+        this.working_timeout = setTimeout(async ()=>{
             engineuart.stop()
-            enginedb.engineOff()
+            await enginedb.engineOff()
             this.stage = 0
             clearInterval(this.cycle_interval)
             console.log('Таймаут времени вращения двигателя')
@@ -154,10 +154,10 @@ class LOOP{
     }
     pauseTimeout(time){
         console.log("start ", time/60000 ," min timeout")  
-        setTimeout(()=>{
+        setTimeout(async ()=>{
             if(this.stage == 2){
                 this.stage = 3
-                enginedb.engineOn()
+                await enginedb.engineOn()
                 engineuart.start(1)
                 this.workingTimeout()
             }
@@ -170,7 +170,7 @@ class LOOP{
                 else{
                     this.curent_cycle ++
                     this.stage = 1
-                    enginedb.engineOn()
+                    await enginedb.engineOn()
                     engineuart.start(1)
                     this.workingTimeout()
                 }

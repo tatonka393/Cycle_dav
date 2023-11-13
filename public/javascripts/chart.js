@@ -116,6 +116,15 @@ function addData(newValue) {
     //   }
   })
 
+function addArrData(arr){
+  for(item of arr){
+    series.data.push({
+      date:am5.time.add(date).getTime(),
+      value:item.value
+    })
+  }
+}
+
 //   var newDataItem = series.dataItems[series.dataItems.length - 1];
 //   newDataItem.animate({
 //     key: "valueYWorking",
@@ -145,6 +154,7 @@ function addData(newValue) {
 // Make stuff animate on load
 // https://www.amcharts.com/docs/v5/concepts/animations/
 chart.appear(1000, 100);
+getPressureArr();
 
 
 
