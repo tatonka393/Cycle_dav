@@ -38,16 +38,25 @@
        
     </div>
 
-    <button class="button" onclick="sendCommand('save')"> Сохранить настройки</button>
-    <button class="button" onclick="sendCommand('read')"> Считать настройки</button>
+    <button class="button" onclick="sendCommand('t_start')"> Включить тимура</button>
+    <button class="button" onclick="sendCommand('t_stop')">Выключить тимура</button>
 </div>
     <div id="chartdiv"></div>
 <div class="container">
-    <button class="button" onclick="sendCommand('start')"> Старт</button>
+    <article class="message">
+  <div class="message-header">
+    <p>terminal</p>
+    <button class="delete" aria-label="delete"></button>
+  </div>
+  <p class="message-body" id="terminal">
+    pe <br> nis  
+  </p>
+</article>
+    {{!-- <button class="button" onclick="sendCommand('start')"> Старт</button>
     <button class="button" onclick="sendCommand('stop')"> Стоп</button>
     <button class="button" onclick="sendCommand('pause')"> Пауза</button>
     <button class="button" onclick="sendCommand('up')"> Давление вверх</button>
-    <button class="button" onclick="sendCommand('down')"> Давление вниз</button>
+    <button class="button" onclick="sendCommand('down')"> Давление вниз</button> --}}
     {{!-- <form method='GET' action='/settings' onsubmit=' sendForm(event); return false; '>
         <p>
             <label for='SensorName'>Номера сенсоров через запятую:</label>
@@ -77,7 +86,7 @@
             <input type='submit' name='subm' value='Применить'>
             
         </p>
-    </form> --}}
+    {{!-- </form> --}}
     <form class=" mt-2" method='GET' action='/settings' onsubmit=' sendForm(event); return false; '>
     <h4 class="title is-4">Настройки</h4>
     <h6 class="subtitle is-6">Меняй любую настройку нажимай применить! Изменится только то что ты заполнил!</h6>
@@ -126,7 +135,7 @@
             </div>
         </div>
          <input class="button" type='submit' name='subm' value='Применить'>
-    </form>
+    </form> --}}
 
     
     

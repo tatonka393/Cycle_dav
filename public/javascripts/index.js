@@ -50,8 +50,23 @@ function changeStage(stage){
     }
     stage_p.textContent = "стадия цикла - " + str;
 }
+const terminalArr = [];
+let termik = document.getElementById('terminal');
+termik.setAttribute('style', 'white-space: pre;');
+function terminalOut(data){
+  terminalArr.push(data)
+  if(terminalArr.length > 10){
+    terminalArr.shift()
+  }
+  let msg = ''
+  for(let item of terminalArr){
+    msg += item + "\n";
+  }
+  
+ termik.textContent = msg;
+}
 
-
+//setInterval(()=>{terminalOut("penis")},1000)
 //setInterval(()=>{addData(monpressure)},1000)
 
 //document.addEventListener('DOMContentLoaded', () => {

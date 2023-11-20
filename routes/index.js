@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const cycle = require('./../utils/cycle')
+const timur = require('../utils/programmRunner')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -41,6 +42,12 @@ router.get('/command:value',async (req,res)=>{
     case 'read':
       message = await cycle.readSettingsFromFile()
       alert = true
+    break
+    case 't_start':
+      timur.start();
+    break
+    case 't_stop':
+      timur.stop();
     break
   }
   res.send({message,alert})
