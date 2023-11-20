@@ -46,8 +46,8 @@ setInterval(()=>{
   mon.addItemToArr(mon.pressure)
   //database.insertPressure('ch_1_sensor_5',mon.pressure)
   if(mon.pressure>0&&cycle.stage!=0){
-    database.insertPressure('ch_1_sensor_6',mon.pressure,cycle.sensor_number)
-    console.log('insert to db ----> ',mon.pressure,cycle.sensor_number)
+    //database.insertPressure('ch_1_sensor_6',mon.pressure,cycle.sensor_number)
+    //console.log('insert to db ----> ',mon.pressure,cycle.sensor_number)
   }
 },1000)
 
