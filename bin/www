@@ -34,6 +34,7 @@ setInterval(()=>{
   io.emit("monometr",{
     sensor_number:cycle.sensor_number,
     pressure:mon.pressure,
+    time:new Date(),
     curent_cycle:cycle.curent_cycle,
     top_pressure:cycle.top_pressure,
     bot_pressure:cycle.bot_pressure,

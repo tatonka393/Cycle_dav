@@ -25,7 +25,7 @@ socket.on('monometr',(arg)=>{
     pause.textContent = `верхняя пауза - ${arg.top_pause} секунд, нижняя пауза - ${arg.bot_pause} секунд`
     changeStage(arg.stage)
     monpressure = arg.pressure
-    addData(monpressure)
+    addData(monpressure,arg.time)
 
 })
 //0 - остановлен, 1 - набор давления, 2 - верхняя пауза, 3 - стравить  давление, 4 - нижняя пауза 

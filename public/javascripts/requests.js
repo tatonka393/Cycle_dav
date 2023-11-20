@@ -14,6 +14,7 @@ async function getPressureArr(){
     });
     
     const result = await response.json();
+    console.log(result)
     addArrData(result)              
 }
 
@@ -38,7 +39,4 @@ async function sendForm(e)
     const result = await response.json()
     alert(result.message)
 }
-
-async function start(){
-    sen
-}
+getPressureArr();

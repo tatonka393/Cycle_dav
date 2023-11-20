@@ -103,9 +103,10 @@ cursor.lineY.set("visible", false);
 // }, 1000)
 
 //var colorSet = am5.ColorSet.new(root, {});
-function addData(newValue) {
+function addData(newValue,date) {
   //var lastDataItem = series.dataItems[series.dataItems.length - 1];
-  var time = am5.time.add(new Date()).getTime();
+  var time = am5.time.add(new Date(date)).getTime();
+  //console.log(time)
   if(series.data.length > 18000)
     series.data.shift()
   series.data.push({
@@ -116,14 +117,7 @@ function addData(newValue) {
     //   }
   })
 
-function addArrData(arr){
-  for(item of arr){
-    series.data.push({
-      date:am5.time.add(date).getTime(),
-      value:item.value
-    })
-  }
-}
+
 
 //   var newDataItem = series.dataItems[series.dataItems.length - 1];
 //   newDataItem.animate({
@@ -149,12 +143,20 @@ function addArrData(arr){
 //     }
 //   }
 }
-
+function addArrData(arr){
+console.log("add arr")
+  for(item of arr){
+    series.data.push({
+      date:am5.time.add(new Date(item.date)).getTime(),
+      value:item.value
+    })
+  }
+}
 
 // Make stuff animate on load
 // https://www.amcharts.com/docs/v5/concepts/animations/
 chart.appear(1000, 100);
-getPressureArr();
+//getPressureArr();
 
 
 

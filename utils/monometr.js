@@ -30,7 +30,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
             date,
             value:press
         })
-        
+        //console.log(this.pressure_arr)
     }
 
     async Create(){
