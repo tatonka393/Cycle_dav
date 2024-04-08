@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/users', usersRouter);
-app.use(redir)
+//app.use(redir)
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

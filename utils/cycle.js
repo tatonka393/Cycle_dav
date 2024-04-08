@@ -31,10 +31,12 @@ class LOOP{
         }
     }
     startLoop(){
+        console.log("startLoop","cycle: ", this.curent_cycle)
         enginedb.engineOn()
         this.rotationInterval()
     }
     stopLoop(){
+        console.log("startLoop","cycle: ", this.curent_cycle)
         engineuart.stop()
         enginedb.engineOff()
         this.curent_cycle = 0 
@@ -47,11 +49,13 @@ class LOOP{
         clearInterval(this.cycle_interval)
     }
     upPressure(){
+        console.log("upPressure","cycle: ", this.curent_cycle)
         enginedb.stepForvard()
         enginedb.engineOn()
         engineuart.start(1)
     }
     downPressure(){
+        console.log("downPressure","cycle: ", this.curent_cycle)
         enginedb.stepBack()
         enginedb.engineOn()
         engineuart.start(1)
@@ -93,8 +97,8 @@ class LOOP{
 
     rotationInterval(){
         this.cycle_interval = setInterval(async()=>{
-            console.log('this.curent_cycle',this.curent_cycle)
-            console.log('this.stage',this.stage)
+            //console.log('this.curent_cycle',this.curent_cycle)
+            //console.log('this.stage',this.stage)
             if(this.stage == 0)
             {
                 this.stage = 1

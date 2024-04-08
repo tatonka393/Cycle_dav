@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-
+const logger = require('./logWriter')
 class KVSMDB{
     constructor() {
         this.pool = new Pool({
@@ -14,19 +14,24 @@ class KVSMDB{
     }
 
     async stepForvard(){
+      console.log('stepForvard')
       return await this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R1R0')`)
     }
 
     async stepBack(){
+        console.log('stepBack')  
       return await this.pool.query(`INSERT INTO front_relay_outside (str) VALUES ('R0R0R0R0')`)
     }
     async engineOn(){
+        console.log('engineOn')
         return await this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R1DC1DISP2')`)
     }
     async engineOff(){
+        console.log('engineOff')
         return await this.pool.query(`INSERT INTO front_relay_inside (str) VALUES ('R1R1R0R0DC1DISP2')`)
     }
     async insertPressure(table,data,sensor_names){
+        console.log('insertPressure')
         let query_string
         if(!sensor_names){
             query_string = `INSERT INTO ${table} (press) VALUES (${data})`       

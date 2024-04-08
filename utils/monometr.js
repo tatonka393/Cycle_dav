@@ -90,6 +90,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
 
     async Write(message){
         return new Promise((resolve, reject) => {
+            console.log("Write",message)
             const crc = CrcCount(message)        
             const full_package = [...this.preambule,...message,crc]
            // console.log(Buffer.from(full_package))

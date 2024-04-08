@@ -1,7 +1,7 @@
 const { SerialPort } = require('serialport')
 const port = new SerialPort({
-    path: 'COM9',
-    baudRate: 115200,
+    path: 'COM5',
+    baudRate: 115200
   })
   const { InterByteTimeoutParser } = require('@serialport/parser-inter-byte-timeout')
   const parser = port.pipe(new InterByteTimeoutParser({ interval: 30 }))
