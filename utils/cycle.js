@@ -1,6 +1,7 @@
 const mon = require('./monometr')
 const enginedb = require('./database')
 const engineuart = require('./kvsm_uart')
+const kamazEngine = require('./kamazEngine')
 const fs = require('fs').promises
 const path = require('path')
 class LOOP{
@@ -32,33 +33,39 @@ class LOOP{
     }
     startLoop(){
         console.log("startLoop","cycle: ", this.curent_cycle)
-        enginedb.engineOn()
+        //enginedb.engineOn()
         this.rotationInterval()
     }
     stopLoop(){
         console.log("startLoop","cycle: ", this.curent_cycle)
-        engineuart.stop()
-        enginedb.engineOff()
+        // engineuart.stop()
+        // enginedb.engineOff()
+        kamazEngine.stop()
         this.curent_cycle = 0 
         this.stage = 0
         clearInterval(this.cycle_interval)
     }
     pauseLoop(){
-        engineuart.stop()
-        enginedb.engineOff()
+        // engineuart.stop()
+        // enginedb.engineOff()
+        kamazEngine.stop()
         clearInterval(this.cycle_interval)
     }
     upPressure(){
         console.log("upPressure","cycle: ", this.curent_cycle)
-        enginedb.stepForvard()
-        enginedb.engineOn()
-        engineuart.start(1)
+        // enginedb.stepForvard()
+        // enginedb.engineOn()
+        // engineuart.start(1)
+        kamazEngine.changeDirection('up')
+        kamazEngine.start()
     }
     downPressure(){
         console.log("downPressure","cycle: ", this.curent_cycle)
-        enginedb.stepBack()
-        enginedb.engineOn()
-        engineuart.start(1)
+        // enginedb.stepBack()
+        // enginedb.engineOn()
+        // engineuart.start(1)
+        kamazEngine.changeDirection('down')
+        kamazEngine.start()
     }
     setBotPressure(new_value){
         if(new_value<4||new_value>100){
@@ -102,9 +109,11 @@ class LOOP{
             if(this.stage == 0)
             {
                 this.stage = 1
-                await enginedb.stepForvard()
-                await enginedb.engineOn()
-                engineuart.start(1)
+                // await enginedb.stepForvard()
+                // await enginedb.engineOn()
+                // engineuart.start(1)
+                kamazEngine.changeDirection('up')
+                kamazEngine.start()
                 this.workingTimeout()
                 return             
             }
@@ -112,9 +121,11 @@ class LOOP{
             {   
                 clearTimeout(this.working_timeout)
                 this.stage = 2
-                engineuart.stop()
-                await enginedb.engineOff()
-                await enginedb.stepBack()
+                // engineuart.stop()
+                // await enginedb.engineOff()
+                // await enginedb.stepBack()
+                kamazEngine.stop()
+                kamazEngine.changeDirection('down');
                 this.pauseTimeout(this.top_pause*1000)//300000)
                 return
             }
@@ -122,16 +133,18 @@ class LOOP{
             {
                 clearTimeout(this.working_timeout)
                 this.stage = 4
-                engineuart.stop()
-                await enginedb.engineOff()
-                await enginedb.stepForvard()
+                // engineuart.stop()
+                // await enginedb.engineOff()
+                // await enginedb.stepForvard()
+                kamazEngine.stop()
+                kamazEngine.changeDirection('up');
                 this.pauseTimeout(this.bot_pause*1000)//60000)
                 return
             }
             // if((this.stage==1&&(this.top_pressure - mon.pressure)<=5)||(this.stage==3&&(mon.pressure - this.bot_pressure)<=5))
               //  engineuart.start(3)
 
-        },200)
+        },100)
     }
     panicInterval(){
         this.panic_interval = setInterval(async ()=>{
@@ -161,8 +174,9 @@ class LOOP{
         setTimeout(async ()=>{
             if(this.stage == 2){
                 this.stage = 3
-                await enginedb.engineOn()
-                engineuart.start(1)
+                // await enginedb.engineOn()
+                // engineuart.start(1)
+                kamazEngine.start()
                 this.workingTimeout()
             }
             if(this.stage == 4)
@@ -174,8 +188,9 @@ class LOOP{
                 else{
                     this.curent_cycle ++
                     this.stage = 1
-                    await enginedb.engineOn()
-                    engineuart.start(1)
+                    // await enginedb.engineOn()
+                    // engineuart.start(1)
+                    kamazEngine.start()
                     this.workingTimeout()
                 }
                     
