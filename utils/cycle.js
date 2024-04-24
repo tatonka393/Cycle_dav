@@ -1,6 +1,6 @@
 const mon = require('./monometr')
-const enginedb = require('./database')
-const engineuart = require('./kvsm_uart')
+//const enginedb = require('./database')
+//const engineuart = require('./kvsm_uart')
 const kamazEngine = require('./kamazEngine')
 const fs = require('fs').promises
 const path = require('path')
@@ -26,7 +26,7 @@ class LOOP{
     async initDevices(){
         try {
             mon.startSurvey()
-            engineuart.Create()
+            //engineuart.Create()
         } catch (error) {
             console.log(e)
         }
@@ -149,24 +149,24 @@ class LOOP{
     panicInterval(){
         this.panic_interval = setInterval(async ()=>{
             if(mon.pressure >= 110){
-                engineuart.stop()
-                await enginedb.engineOff()
                 console.log("превышено макс давление")
+                kamazEngine.stop()
+                //engineuart.stop()
+                //await enginedb.engineOff()
             }
             if(mon.err_state){
-                engineuart.stop()
-                await enginedb.engineOff()
                 console.log("монометр не отвечает")
+                kamazEngine.stop()               
             }
         },100)
     }
     workingTimeout(){
         this.working_timeout = setTimeout(async ()=>{
-            engineuart.stop()
-            await enginedb.engineOff()
+            console.log('Таймаут времени вращения двигателя')
+            kamazEngine.stop()
             this.stage = 0
             clearInterval(this.cycle_interval)
-            console.log('Таймаут времени вращения двигателя')
+            
         },75000)
     }
     pauseTimeout(time){

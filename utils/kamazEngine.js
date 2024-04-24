@@ -9,41 +9,49 @@ gpio.init_gpio(13,gpio.GPIO_MODE_INPUT_PULLDOWN,1000); //кнопка
 class KamazEngine{
     #direction
     #onMove
+    #moveState
 
     constructor(){
+        console.log("kamaz engine")
         this.#onMove = false
         this.#direction = true;
+        this.#moveState = false
         setInterval(()=>{
-            if(this.#onMove){
+            if(!this.#onMove){
                 if(gpio.get_gpio(6)){
                     gpio.set_gpio(26,0)
                     gpio.set_gpio(20,1)
+                    this.#moveState = true
                 }if(gpio.get_gpio(13)){
                     gpio.set_gpio(26,1)
                     gpio.set_gpio(20,0)
+                    this.#moveState = true
                 }
                 if(!gpio.get_gpio(13)&&!gpio.get_gpio(6)){
                 gpio.set_gpio(26,0)
                 gpio.set_gpio(20,0)
+                this.#moveState = false
                 }
             }
         },30)
     }
     
     start(){
-        if(this.#direction){
+        if(!this.#direction){
             gpio.set_gpio(26,0)
             gpio.set_gpio(20,1) 
         }else{
             gpio.set_gpio(26,1)
             gpio.set_gpio(20,0)
         }
+        this.#moveState = true
         this.#onMove = true
     }
     stop(){
         gpio.set_gpio(26,0)
         gpio.set_gpio(20,0)
         this.#onMove = false
+        this.#moveState = false
     }
     /**
      * Изменяет направление в зависимости от указанного значения.
@@ -57,7 +65,10 @@ class KamazEngine{
             this.#direction = false;
     }
     getDirection(){
-        return this.#direction;
+        return this.#direction?'up':'down';
+    }
+    getMoveState(){
+        return this.#moveState?'moveing':'stoped';
     }
 
 }

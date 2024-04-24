@@ -1,6 +1,6 @@
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
-
+const kamazEngine = require('../utils/kamazEngine')
 
 // const port = new SerialPort({
 //     path: 'COM9',
@@ -20,6 +20,9 @@ const { ReadlineParser } = require('@serialport/parser-readline')
         this.err_count = 0
         this.err_state = false
         this.pressure_arr = []
+        this.err_counter = 0
+        this.wait_answer = false
+        this.timer = new Date
     }
 
     addItemToArr(press){
@@ -65,9 +68,10 @@ const { ReadlineParser } = require('@serialport/parser-readline')
         }
         catch(e){
             this.err_count ++
+            this.err_counter ++
             if(this.err_count >= 10)
                 this.err_state = true 
-            console.log(e)
+            console.log(e,";errcounter - ",this.err_counter,";engine state- ",kamazEngine.getMoveState() )
         }
     }
 
@@ -76,6 +80,8 @@ const { ReadlineParser } = require('@serialport/parser-readline')
             await mon.Create()
             setInterval(async ()=>{
                 //console.log('start')
+                //console.log("vopros")
+                
                 mon.pressure  = await mon.checkPress()
                 //console.log('stop')
                 //console.log(mon.pressure)
@@ -90,7 +96,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
 
     async Write(message){
         return new Promise((resolve, reject) => {
-            console.log("Write",message)
+           // console.log("Write",message)
             const crc = CrcCount(message)        
             const full_package = [...this.preambule,...message,crc]
            // console.log(Buffer.from(full_package))
@@ -99,14 +105,19 @@ const { ReadlineParser } = require('@serialport/parser-readline')
             const wait_timeout = setTimeout(() => {
                 this.parser.removeAllListeners()
                 reject({error:"timeout is end"})
-            }, 900);
+            }, 2000);
             this.parser.on('data', (data)=>{
+                //console.log("otvet")
                     clearTimeout(wait_timeout)
                     this.parser.removeAllListeners()  //удаляем слушателя чтобы память не тратить
                     const msg = data.slice(3,data.length-1)
                     const recive_crc = CrcCount(msg)
-                    if(recive_crc == data[data.length-1])
+                    if(recive_crc == data[data.length-1]){
+                        const t = new Date() - this.timer
+                        this.timer = new Date()
+                        //console.log(t)
                         resolve(msg)
+                    }
                     else
                         reject({error:'crc error',data})   
 
