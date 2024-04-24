@@ -12,7 +12,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
   class DM500{
     constructor(){
         this.preambule = [0xff,0xff,0xff]
-        this.path = '/dev/ttyS4'//'/dev/ttyUSB0'
+        this.path = '/dev/ttyUSB0'
         this.baud_rate = 9600
         this.port
         this.parser
@@ -43,7 +43,7 @@ const { ReadlineParser } = require('@serialport/parser-readline')
                     return "port is open"
                 }
             }
-            throw "port is not found"
+            throw "monometr port is not found"
             
         }
         catch(e){
