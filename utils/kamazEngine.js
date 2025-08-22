@@ -59,13 +59,13 @@ class KamazEngine{
      * @param {string} direction - Направление ('up' или 'down').
      */
     changeDirection(direction){
-        if(direction == 'up')
-            this.#direction = true;
         if(direction == 'down')
+            this.#direction = true;
+        if(direction == 'up')
             this.#direction = false;
     }
     getDirection(){
-        return this.#direction?'up':'down';
+        return this.#direction?'down':'up';
     }
     getMoveState(){
         return this.#moveState?'moveing':'stoped';

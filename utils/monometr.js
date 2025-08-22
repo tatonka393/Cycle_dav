@@ -40,6 +40,7 @@ const kamazEngine = require('../utils/kamazEngine')
         try{
             const port_list  = await SerialPort.list()
             for(let item of port_list){
+                console.log(item.path)
                 if(item.path == this.path){
                     this.port = new SerialPort({ path: this.path,baudRate: this.baud_rate})
                     this.parser = this.port.pipe(new InterByteTimeoutParser({ interval: 110}))
@@ -69,7 +70,7 @@ const kamazEngine = require('../utils/kamazEngine')
         catch(e){
             this.err_count ++
             this.err_counter ++
-            if(this.err_count >= 10)
+            if(this.err_count >= 5)
                 this.err_state = true 
             console.log(e,";errcounter - ",this.err_counter,";engine state- ",kamazEngine.getMoveState() )
         }

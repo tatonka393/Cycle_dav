@@ -75,8 +75,8 @@ class LOOP{
         this.bot_pressure = new_value
     }   
     setTopPresure(new_value){
-        if(new_value<1||new_value>100){
-            this.top_pressure = 100
+        if(new_value<1||new_value>150){
+            this.top_pressure = 150
             return
         }
         
@@ -148,15 +148,17 @@ class LOOP{
     }
     panicInterval(){
         this.panic_interval = setInterval(async ()=>{
-            if(mon.pressure >= 110){
+            if(mon.pressure >= 150){
                 console.log("превышено макс давление")
-                kamazEngine.stop()
+                //kamazEngine.stop()
+                this.stopLoop()
                 //engineuart.stop()
                 //await enginedb.engineOff()
             }
             if(mon.err_state){
                 console.log("монометр не отвечает")
-                kamazEngine.stop()               
+                //kamazEngine.stop()
+                this.stopLoop()               
             }
         },100)
     }
