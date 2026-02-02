@@ -27,8 +27,10 @@ const kamazEngine = require('../utils/kamazEngine')
 
     addItemToArr(press){
         const date = new Date()
-        if(this.pressure_arr > 18000)
-            this.pressure_arr.unshift()
+        if(this.pressure_arr.length >= 18000){
+            this.pressure_arr.splice(0,this.pressure_arr.length-18000)
+            //this.pressure_arr.unshift()
+        }
         this.pressure_arr.push({
             date,
             value:press

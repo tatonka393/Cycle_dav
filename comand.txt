@@ -10,3 +10,8 @@
 
 [     fa      ,     fb      ]
 [начало пакета,конец пакета ]
+
+
+пароль от Raspbery
+[логин       | пароль   ]  
+ RpiGeoptics | geoptics
